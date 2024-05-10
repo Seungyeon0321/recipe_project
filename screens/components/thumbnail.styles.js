@@ -5,8 +5,8 @@ export const ThumbnailStyles = StyleSheet.create({
         marginTop: 25,
     },
     image: {
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
         width: '100%',
         opacity: 0.7,
     },
@@ -14,13 +14,12 @@ export const ThumbnailStyles = StyleSheet.create({
         backgroundColor: '#FDBF50',
         paddingVertical: 10,
         alignItems: 'center',
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5,
     },
     title: {
-        // fontFamily:'Raleway-Bold'
+        fontFamily:'raleway-bold',
         fontSize: 16,
-        fontWeight: 'bold'
     },
     iconContainer: {
         position: 'absolute',
@@ -29,11 +28,11 @@ export const ThumbnailStyles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         marginBottom: 10,
     },
     iconFont: {
-        // fontFamily:'Raleway-Bold'
+        fontFamily:'raleway-bold',
         fontSize: 20
     },
     icon: {

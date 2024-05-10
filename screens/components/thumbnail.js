@@ -14,7 +14,7 @@ export default function Thumbnail({ foodImage, foodTitle, favorite, time }) {
                 <View style={row}>
                     <Image
                         style={icon}
-                        source={require('../../assets/images/favorite.png')}
+                        source={require('../../assets/images/favorite_filled.png')}
                     />
                     <Text style={iconFont}>{favorite}</Text>
                 </View>

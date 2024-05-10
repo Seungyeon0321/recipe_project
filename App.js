@@ -1,8 +1,22 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import MainScreen from './screens/main/main.screen';
+import { useFonts } from 'expo-font';
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigator from './main/navigation';
 
 export default function App() {
-  return (
-<MainScreen/>
-  );
+  const [fontsLoaded] = useFonts({
+    'raleway-regular': require('./assets/fonts/Raleway-Regular.ttf'),
+    'raleway-italic': require('./assets/fonts/Raleway-Italic.ttf'),
+    'raleway-bold': require('./assets/fonts/Raleway-Bold.ttf'),
+  });
+
+  return fontsLoaded ? (
+    <>
+    <NavigationContainer>
+      <AppNavigator />
+      <StatusBar style="auto" />
+    </NavigationContainer>
+    </>
+  ) : null;
 }
