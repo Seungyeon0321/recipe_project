@@ -3,31 +3,12 @@ const User = require("../models/user");
 
 const passport = require("passport");
 
-// exports.getUserInfo = async (req, res, next) => {
-//   try {
-//     //need to get user info,
-//     if (req.user) {
-//       const user = User.findOne({
-//         userId: req.user.userId,
-//       });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     next(error);
-//   }
-// };
-
 exports.createUser = async (req, res, next) => {
   try {
-
     const existingUser = await User.findOne({
       userEmail: req.body.userEmail,
     });
 
-    // const exGFUser = await GoogleAndFaceBookUser.findOne({
-    //   userEmail: req.body.userEmail,
-    // });
-    // console.log("exxxxxxxxxx", exUser, exGFUser);
     if (existingUser)
       return res
         .status(403)
@@ -36,6 +17,7 @@ exports.createUser = async (req, res, next) => {
     const newUser = await User.create({
       userEmail: req.body.userEmail,
       password: req.body.password,
+      passwordConfirm: req.body.passwordConfirm,
       name: req.body.name,
     });
 

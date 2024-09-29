@@ -49,8 +49,6 @@ app.get("/", (req, res) => {
 
 // //passport authenticate
 // //This shows the google window
-
-//This navigates users to the URL after they login
 app.get(
   "/auth/callback",
   passport.authenticate("google", {
@@ -61,22 +59,6 @@ app.get(
     res.redirect("/auth/protected");
   }
 );
-
-//passport authenticate
-//This shows the google window
-// app.get("/auth/facebook", passport.authenticate("facebook"));
-
-// app.get(
-//   "/auth/facebook/callback",
-//   passport.authenticate("facebook", {
-//     failureRedirect: "/login",
-//     successRedirect: "/auth/protected",
-//   }),
-//   function (req, res) {
-//     // Successful authentication, redirect home.
-//     res.redirect("/");
-//   }
-// );
 
 //endpoint login for google, need to redirect succeed page, need to navigate users to main Pages
 app.get("/auth/protected", isLoggedIn, (req, res) => {

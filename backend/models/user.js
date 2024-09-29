@@ -23,12 +23,14 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       validate: [validator.isEmail, "Please provide a valid email"],
+      required: DoNotHaveGoogleOrGithub,
     },
     password: {
       type: String,
       minlength: 8,
       maxlength: 100,
       select: false,
+      required: DoNotHaveGoogleOrGithub,
     },
     passwordConfirm: {
       type: String,
@@ -43,23 +45,18 @@ const userSchema = new mongoose.Schema(
   } // posts: [postShema]
 );
 
-userSchema.pre("save", function (next) {
-  if (!this.isModified("password") || !this.password) return next();
-
-  if (this.password !== this.passwordConfirm) {
-    return next(new Error("Passwords do not match"));
-  }
-
-  next();
-});
-
+//I have to make it work only when the user create an account.
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  try {
+    if (!this.isModified("password")) return next();
 
-  this.password = await bcrypt.hash(this.password, 12);
-  this.passwordConfirm = undefined;
+    this.password = await bcrypt.hash(this.password, 12);
+    this.passwordConfirm = undefined;
 
-  next();
+    next();
+  } catch (error) {
+    console.error("Please provide a password and passwordConfirm");
+  }
 });
 
 // Compare password

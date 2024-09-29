@@ -50,8 +50,9 @@ module.exports = googleStrategy = () => {
       async (accessToken, refreshToken, profile, cb) => {
         try {
           //check if user already exists in our db
+          //여기서 profile.id가 email로 전송되는지 확인해야함.
           const exGoogleUser = await User.findOne({
-            googleId: profile.id,
+            googleEmail: profile.emails[0]["value"],
           });
 
           //If there is no id, will make new ID
@@ -59,7 +60,7 @@ module.exports = googleStrategy = () => {
             let email = profile.emails[0]["value"];
             let newGoogleUser = new User({
               googleId: profile.id,
-              userEmail: email,
+              googleEmail: email,
               name: profile.displayName,
             });
 
