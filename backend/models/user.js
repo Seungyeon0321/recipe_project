@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema(
       select: false,
       required: DoNotHaveGoogleOrGithub,
     },
+    //해당 작업은 frontend에서도 해야함,
     passwordConfirm: {
       type: String,
       validate: {
@@ -42,6 +43,7 @@ const userSchema = new mongoose.Schema(
         message: "Passwords are not the same",
       },
     },
+    posts: [postSchema],
   } // posts: [postShema]
 );
 

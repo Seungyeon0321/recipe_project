@@ -13,6 +13,7 @@ const passportConfig = require("./config/passport");
 
 const { isLoggedIn, isNotLoggedIn } = require("./router/middlewares");
 const userRouter = require("./router/user");
+const postRouter = require("./router/post");
 
 dotenv.config();
 
@@ -68,11 +69,12 @@ app.get("/auth/protected", isLoggedIn, (req, res) => {
   res.status(200).json({ user: req.user });
 });
 
-app.get("/auth/failure", isLoggedIn, (req, res) => {
-  res.send("You are failed!!!");
-});
+// app.get("/auth/failure", isLoggedIn, (req, res) => {
+//   res.send("You are failed!!!");
+// });
 
 app.use("/user", userRouter);
+app.use("/post", postRouter);
 
 ///////////// Start server
 
