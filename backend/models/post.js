@@ -40,6 +40,10 @@ const postSchema = new mongoose.Schema({
     ref: "User",
     required: [true, "Please provide a user id"],
   },
+  created_date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Post = mongoose.model("Post", postSchema);

@@ -22,6 +22,18 @@ exports.createPosts = async (req, res, next) => {
   }
 };
 
+exports.uploadImage = async (req, res, next) => {
+  try {
+    console.log("filllllllllllllllle", req.file);
+    res.status(200).json({
+      status: "success",
+      image: req.file.filename,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 // router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
 //   try {
 //     const hashtags = req.body.content.match(/#[^\s#]+/g);
