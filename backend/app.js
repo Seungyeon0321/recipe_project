@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const app = express();
+const cors = require("cors");
 const port = 5000;
 
 const mongoose = require("mongoose");
@@ -28,6 +29,13 @@ passportConfig();
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+  })
+);
 
 // Middleware for session
 app.use(cookieParser());
@@ -73,8 +81,8 @@ app.get("/auth/protected", isLoggedIn, (req, res) => {
 //   res.send("You are failed!!!");
 // });
 
-app.use("/user", userRouter);
 app.use("/post", postRouter);
+app.use("/user", userRouter);
 
 ///////////// Start server
 
