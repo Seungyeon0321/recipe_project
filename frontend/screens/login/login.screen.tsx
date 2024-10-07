@@ -1,26 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, SafeAreaView, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Login() {
-
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
 
   const handleSignUpPress = () => {
-    navigation.navigate('Signup');
+    navigation.navigate("Signup");
   };
 
   const handleProceed = () => {
-    navigation.navigate('AppNavigator');
+    navigation.navigate("AppNavigator");
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={require('../../assets/images/greeting/logo.png')} style={styles.logo} />
+      <Image
+        source={require("../../assets/images/greeting/logo.png")}
+        style={styles.logo}
+      />
 
       <TextInput
         style={styles.input}
@@ -41,21 +51,13 @@ export default function Login() {
         <Text style={styles.forgetText}>forgot your ID/password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={handleProceed}
-      >
+      <TouchableOpacity style={styles.loginButton} onPress={handleProceed}>
         <Text style={styles.loginText}>Log in</Text>
       </TouchableOpacity>
 
-      <Text style={styles.paragraph}>
-        OR
-      </Text>
+      <Text style={styles.paragraph}>OR</Text>
 
-      <TouchableOpacity
-        style={styles.signupButton}
-        onPress={handleSignUpPress}
-      >
+      <TouchableOpacity style={styles.signupButton} onPress={handleSignUpPress}>
         <Text style={styles.signupText}>Sign up</Text>
       </TouchableOpacity>
 
@@ -67,9 +69,9 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FDBF50',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#FDBF50",
+    alignItems: "center",
+    justifyContent: "center",
   },
   logo: {
     width: 206,
@@ -79,13 +81,13 @@ const styles = StyleSheet.create({
   paragraph: {
     margin: 24,
     fontSize: 20,
-    textAlign: 'center',
-    fontFamily: 'raleway-bold',
+    textAlign: "center",
+    fontFamily: "raleway-bold",
   },
   input: {
     width: 204,
     height: 63,
-    borderColor: '#000',
+    borderColor: "#000",
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 22,
@@ -97,30 +99,30 @@ const styles = StyleSheet.create({
     width: 204,
     height: 63,
     borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FF724C',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FF724C",
   },
   signupButton: {
     width: 204,
     height: 63,
     borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#242C41',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#242C41",
   },
   loginText: {
-    color: '#242C41',
-    fontFamily: 'raleway-bold',
+    color: "#242C41",
+    fontFamily: "raleway-bold",
     fontSize: 24,
   },
   signupText: {
-    color: 'white',
-    fontFamily: 'raleway-bold',
+    color: "white",
+    fontFamily: "raleway-bold",
     fontSize: 24,
   },
   forgetText: {
     fontSize: 16,
-    textDecorationLine: 'underline',
-  }
+    textDecorationLine: "underline",
+  },
 });
