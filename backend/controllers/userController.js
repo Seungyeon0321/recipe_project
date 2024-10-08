@@ -5,15 +5,21 @@ const passport = require("passport");
 
 exports.createUser = async (req, res, next) => {
   try {
+    //Check if the email is already used even the google or facebook account
     const existingUser = await User.findOne({
       userEmail: req.body.userEmail,
     });
 
-    if (existingUser)
+    const existingGoogleUser = await User.findOne({
+      googleEmail: req.body.userEmail,
+    });
+
+    if (existingUser || existingGoogleUser)
       return res
         .status(403)
         .json({ error: "The email address is already used" });
 
+    //Create a new user
     const newUser = await User.create({
       userEmail: req.body.userEmail,
       password: req.body.password,

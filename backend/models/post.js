@@ -8,6 +8,9 @@ const postSchema = new mongoose.Schema({
     maxlength: [40, "Title must be less than 40 characters"],
     minlength: [5, "Title must be more than 5 characters"],
   },
+  image: {
+    type: String,
+  },
   ingredients: {
     type: [
       {
