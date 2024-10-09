@@ -24,7 +24,8 @@ mongoose.connect(DB).then((con) => {
   console.log("DB connection successful!");
 });
 
-passportConfig();
+passportConfig.localStrategy();
+passportConfig.googleStrategy();
 
 app.use(morgan("tiny"));
 app.use(express.json());

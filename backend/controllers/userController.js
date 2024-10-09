@@ -39,6 +39,8 @@ exports.createUser = async (req, res, next) => {
 
 //LoginWithLocal
 exports.loginWithLocal = (req, res) => {
+  console.log(req);
+
   if (req.user) {
     return res.status(200).json({
       status: "success",

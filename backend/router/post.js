@@ -4,6 +4,8 @@ const path = require("path");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 const postController = require("../controllers/postController");
 
+const router = express.Router();
+
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./images");
@@ -20,10 +22,15 @@ const upload = multer({
   storage: fileStorage,
   limits: { fileSize: 10 * 1024 * 1024 },
 });
-const router = express.Router();
 
 // Create a post
-router.post("/", postController.createPosts);
-router.post("/image", upload.single("image"), postController.uploadImage);
+router.post(
+  "/",
+  isLoggedIn,
+  upload.single("image"),
+  postController.createPosts
+);
+
+// router.post("/image", upload.single("image"), postController.uploadImage);
 
 module.exports = router;

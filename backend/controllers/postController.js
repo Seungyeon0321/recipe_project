@@ -9,8 +9,10 @@ exports.createPosts = async (req, res, next) => {
   try {
     const newPost = await Post.create({
       title: req.body.title,
+      image: req.file.filename,
       ingredients: req.body.ingredients,
       instructions: req.body.instructions,
+      UserId: req.user.id,
     });
 
     res.status(201).json({
@@ -19,6 +21,7 @@ exports.createPosts = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err);
+    next(err);
   }
 };
 
