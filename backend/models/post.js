@@ -8,7 +8,9 @@ const postSchema = new mongoose.Schema({
     maxlength: [40, "Title must be less than 40 characters"],
     minlength: [5, "Title must be more than 5 characters"],
   },
-  image: {
+  images: {
+    // src: s3의 url이 들어간다
+    size: Number,
     type: String,
   },
   ingredients: {
@@ -39,8 +41,7 @@ const postSchema = new mongoose.Schema({
     required: [true, "Please provide instructions"],
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    type: String,
     required: [true, "Please provide a user id"],
   },
   created_date: {

@@ -24,13 +24,14 @@ const upload = multer({
 });
 
 // Create a post
+router.post("/", isLoggedIn, upload.none("image"), postController.createPosts);
+
+//when click upload image button, this api is called
 router.post(
-  "/",
+  "/image",
   isLoggedIn,
   upload.single("image"),
-  postController.createPosts
+  postController.uploadImage
 );
-
-// router.post("/image", upload.single("image"), postController.uploadImage);
 
 module.exports = router;

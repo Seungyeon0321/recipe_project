@@ -83,6 +83,7 @@ app.get("/auth/protected", isLoggedIn, (req, res) => {
 // });
 
 app.use("/post", postRouter);
+app.use("/posts", postsRouter);
 app.use("/user", userRouter);
 
 ///////////// Start server

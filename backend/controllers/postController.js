@@ -7,12 +7,18 @@ const Post = require("../models/post");
 //The Id below will be brought by the login information
 exports.createPosts = async (req, res, next) => {
   try {
+    // Logged을 요구는 게시물을 포스팅하려고 + 버튼을 눌렀을 때 handling하는 게 좋아보임, 바로 url을 입력해서
+    // 게시물에 포스팅은 미들웨어로 막아줌
+    const userId = req.user.id;
+
+    const images = req.body.images;
+
     const newPost = await Post.create({
       title: req.body.title,
-      image: req.file.filename,
+      image: req.body.image,
       ingredients: req.body.ingredients,
       instructions: req.body.instructions,
-      UserId: req.user.id,
+      userId,
     });
 
     res.status(201).json({
@@ -26,8 +32,8 @@ exports.createPosts = async (req, res, next) => {
 };
 
 exports.uploadImage = async (req, res, next) => {
+  //일단은 내 local에서 해당 파일이 올라가게 하고, 나중에 해당 파일을 s3로 올리게 해야할듯
   try {
-    console.log("filllllllllllllllle", req.file);
     res.status(200).json({
       status: "success",
       image: req.file.filename,
