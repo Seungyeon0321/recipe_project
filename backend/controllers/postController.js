@@ -1,9 +1,10 @@
 const User = require("../models/user");
 const Post = require("../models/post");
+const { client } = require("../server");
 
 //have to keep the user information to figure out the user id. This user id
 //which is unique will be used a base to add the poset on the base id.
-
+// const collection = client.db("test").collection("posts");
 //The Id below will be brought by the login information
 exports.createPosts = async (req, res, next) => {
   try {
@@ -38,6 +39,24 @@ exports.uploadImage = async (req, res, next) => {
       status: "success",
       image: req.file.filename,
     });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+exports.searchPosts = async (req, res, next) => {
+  try {
+    const queryString = req.body.query;
+    const queryStrings = queryString.split(" ");
+    allQueries = [];
+    queryStrings.forEach((element) => {
+      allQueries.push({ title: { $regex: String(element) } });
+    });
+    const allPosts = await Post.find({ $or: allQueries });
+
+    if (!allPosts || allPosts.length === 0)
+      res.status(400).send({ error: "No post was found" });
+    res.status(200).send(allPosts);
   } catch (err) {
     console.error(err);
   }

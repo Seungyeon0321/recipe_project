@@ -25,6 +25,7 @@ const upload = multer({
 
 // Create a post
 router.post("/", isLoggedIn, upload.none("image"), postController.createPosts);
+router.post("/search", postController.searchPosts);
 
 //when click upload image button, this api is called
 router.post(

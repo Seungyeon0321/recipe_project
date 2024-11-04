@@ -15,14 +15,7 @@ const passportConfig = require("./config/passport");
 const { isLoggedIn, isNotLoggedIn } = require("./router/middlewares");
 const userRouter = require("./router/user");
 const postRouter = require("./router/post");
-
-dotenv.config();
-
-const DB = process.env.MONGO_URL.replace("<password>", process.env.MONGO_PW);
-
-mongoose.connect(DB).then((con) => {
-  console.log("DB connection successful!");
-});
+const postsRouter = require("./router/posts");
 
 passportConfig.localStrategy();
 passportConfig.googleStrategy();
@@ -85,11 +78,5 @@ app.get("/auth/protected", isLoggedIn, (req, res) => {
 app.use("/post", postRouter);
 app.use("/posts", postsRouter);
 app.use("/user", userRouter);
-
-///////////// Start server
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
 
 module.exports = app;
