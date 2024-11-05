@@ -33,7 +33,6 @@ module.exports = {
               return done(null, false, { reason: "This user doesn't exist" });
             }
 
-            console.log("user", user);
             //3) check if password is correct
             if (!(await user.comparePassword(password, user.password))) {
               return done(null, false, {

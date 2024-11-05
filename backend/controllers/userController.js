@@ -1,4 +1,5 @@
 const User = require("../models/user");
+
 // const GoogleAndFaceBookUser = require("../models/google");
 
 const passport = require("passport");
@@ -38,19 +39,35 @@ exports.createUser = async (req, res, next) => {
 };
 
 //LoginWithLocal
-exports.loginWithLocal = (req, res) => {
-  console.log(req);
+exports.loginWithLocal = (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (info) {
+      return res.status(401).send(info.reason);
+    }
 
-  if (req.user) {
-    return res.status(200).json({
-      status: "success",
-      data: {
-        user: req.user,
-      },
+    //There is no user
+    if (!user) {
+      return res.redirect("/login");
+    }
+
+    return req.login(user, async (loginErr) => {
+      if (loginErr) {
+        console.error(loginErr);
+        return next(loginErr);
+      }
+
+      res.status(200).json({
+        status: "success",
+        user: user,
+      });
     });
-  } else {
-    return res.status(401).json({ error: "Authentication failed" });
-  }
+    //I cannot send all information about the user
+
+    // });
+  })(req, res, next);
 };
 
 //LoginWithGoogle or Github
@@ -64,10 +81,16 @@ exports.loginWithGoogle = async (req, res, next) => {
       if (info) {
         return res.status(401).json({ error: info.reason });
       }
+
+      console.log("Session ID:", req.sessionID);
+      console.log("Session Data:", req.session);
+      console.log("User in Session:", req.user);
+
       return req.login(user, async (loginErr) => {
         if (loginErr) {
           return next(loginErr);
         }
+
         return res.status(200).json(user);
       });
     })(req, res, next);
@@ -76,9 +99,9 @@ exports.loginWithGoogle = async (req, res, next) => {
   }
 };
 
-exports.logout = (req, res, next) => {
-  req.logout();
-  req.session.destroy();
-  res.redirect("/");
-  res.send("ok");
+exports.userLogout = (req, res, next) => {
+  console.log("logout");
+  req.logout(() => {
+    res.send("ok");
+  });
 };

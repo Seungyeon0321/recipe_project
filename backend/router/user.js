@@ -10,16 +10,7 @@ const router = express.Router();
 router.post("/signup", isNotLoggedIn, userController.createUser);
 
 // Local login
-router.post(
-  "/login",
-  isNotLoggedIn,
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true,
-  }),
-  userController.loginWithLocal
-);
+router.post("/login", isNotLoggedIn, userController.loginWithLocal);
 
 // Google login
 router.get(
@@ -53,6 +44,6 @@ router.get("/auth/failure", isLoggedIn, (req, res) => {
 });
 
 // Logout
-router.get("/logout", isLoggedIn, userController.logout);
+router.post("/logout", isLoggedIn, userController.userLogout);
 
 module.exports = router;
