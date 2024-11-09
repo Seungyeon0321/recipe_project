@@ -3,11 +3,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const app = express();
 const cors = require("cors");
-const port = 5000;
 
-const mongoose = require("mongoose");
-
-const dotenv = require("dotenv");
 const session = require("express-session");
 const passport = require("passport");
 const passportConfig = require("./config/passport");
@@ -16,6 +12,7 @@ const { isLoggedIn, isNotLoggedIn } = require("./router/middlewares");
 const userRouter = require("./router/user");
 const postRouter = require("./router/post");
 const postsRouter = require("./router/posts");
+const likeRouter = require("./router/like");
 
 passportConfig.localStrategy();
 passportConfig.googleStrategy();
@@ -78,5 +75,6 @@ app.get("/auth/protected", isLoggedIn, (req, res) => {
 app.use("/post", postRouter);
 app.use("/posts", postsRouter);
 app.use("/user", userRouter);
+app.use("/like", likeRouter);
 
 module.exports = app;

@@ -48,6 +48,10 @@ const postSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  updated_date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Post = mongoose.model("Post", postSchema);
