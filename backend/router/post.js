@@ -35,4 +35,6 @@ router.post(
   postController.uploadImage
 );
 
+router.get("/:postId", postController.getPost);
+
 module.exports = router;

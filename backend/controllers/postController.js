@@ -32,6 +32,25 @@ exports.createPosts = async (req, res, next) => {
   }
 };
 
+exports.getPost = async (req, res, next) => {
+  try {
+    const postId = req.params.postId;
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.status(200).json({
+      status: "success",
+      post,
+    });
+  } catch (err) {
+    console.log(err);
+    return next(err);
+  }
+};
+
 exports.uploadImage = async (req, res, next) => {
   //일단은 내 local에서 해당 파일이 올라가게 하고, 나중에 해당 파일을 s3로 올리게 해야할듯
   try {
@@ -52,6 +71,7 @@ exports.searchPosts = async (req, res, next) => {
     queryStrings.forEach((element) => {
       allQueries.push({ title: { $regex: String(element) } });
     });
+
     const allPosts = await Post.find({ $or: allQueries });
 
     if (!allPosts || allPosts.length === 0)

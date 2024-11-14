@@ -82,10 +82,6 @@ exports.loginWithGoogle = async (req, res, next) => {
         return res.status(401).json({ error: info.reason });
       }
 
-      console.log("Session ID:", req.sessionID);
-      console.log("Session Data:", req.session);
-      console.log("User in Session:", req.user);
-
       return req.login(user, async (loginErr) => {
         if (loginErr) {
           return next(loginErr);
