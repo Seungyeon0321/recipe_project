@@ -91,6 +91,7 @@ module.exports = {
     );
   },
 };
+
 // Get user from upper middleware and save it into session
 passport.serializeUser(async (user, done) => {
   done(null, user._id);
@@ -98,6 +99,7 @@ passport.serializeUser(async (user, done) => {
 
 passport.deserializeUser(async (userId, done) => {
   try {
+    //해당 부분이 있기 때문에 backend에서 req.user로 접근할 수 있음.
     const user = await User.findById(userId);
     done(null, user);
   } catch (error) {
