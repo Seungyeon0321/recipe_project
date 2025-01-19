@@ -2,8 +2,8 @@ import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
-import AppNavigator from "./main/navigation";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AppNavigator from "./main/navigation";
 import Greeting from "./screens/landing/greeting.screen";
 import Signup from "./screens/signup/signup.screen";
 import Login from "./screens/login/login.screen";
@@ -24,6 +24,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
+      <StatusBar style="auto" />
       <Stack.Navigator initialRouteName="Greeting">
         <Stack.Screen
           name="Greeting"
@@ -46,7 +47,6 @@ export default function App() {
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
-      <StatusBar style="auto" />
     </NavigationContainer>
   );
 }
