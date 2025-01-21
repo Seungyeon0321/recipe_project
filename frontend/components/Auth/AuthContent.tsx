@@ -13,9 +13,13 @@ import { AuthStyles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 
 export default function AuthContent({
-  children,
+  onAuthenticate,
 }: {
-  children: React.ReactNode;
+  onAuthenticate: (credentials: {
+    email: string;
+    password: string;
+    username: string;
+  }) => void;
 }) {
   const navigation = useNavigation();
   const [credentialsInvalid, setCredentialsInvalid] = useState({
@@ -54,6 +58,7 @@ export default function AuthContent({
       });
       return;
     }
+    console.log("submitHandler, auth");
     onAuthenticate({ email, password, username });
   }
 

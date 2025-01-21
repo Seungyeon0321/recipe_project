@@ -1,13 +1,18 @@
 import axios from "axios";
 
-const Singup = async (email: string, password: string, username: string) => {
-  const response = await axios.post("http://localhost:8080/api/auth/signup", {
-    email,
-    password,
-    username,
+const Signup = async (credentials: {
+  email: string;
+  password: string;
+  username: string;
+}) => {
+  const response = await axios.post("http://127.0.0.1:5000/user/login", {
+    userEmail: credentials.email,
+    password: credentials.password,
+    name: credentials.username,
   });
+  console.log("hello");
 
   return response;
 };
 
-export { Singup };
+export { Signup };

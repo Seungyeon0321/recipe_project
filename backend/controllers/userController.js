@@ -6,6 +6,7 @@ const passport = require("passport");
 
 exports.createUser = async (req, res, next) => {
   try {
+    console.log("backend -");
     //Check if the email is already used even the google or facebook account
     const existingUser = await User.findOne({
       userEmail: req.body.userEmail,
