@@ -19,7 +19,7 @@ export default function App() {
   });
 
   if (!fontsLoaded) {
-    return <LoadingOverlay />;
+    return <LoadingOverlay message="Loading fonts..." />;
   }
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Input from "./Input";
 import { AuthStyles } from "./styles";
 import { TouchableOpacity, Text } from "react-native";
@@ -16,17 +16,19 @@ interface AuthFormProps {
     confirmPassword: string;
     username: string;
   }) => void;
+  login?: boolean;
 }
 
 export default function AuthForm({
   credentialsInvalid,
   onSubmit,
+  login,
 }: AuthFormProps) {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
   const [enteredUserName, setEnteredUserName] = useState("");
-
+  console.log(login);
   const {
     email: emailIsValid,
     password: passwordIsValid,
@@ -78,25 +80,40 @@ export default function AuthForm({
         isInvalid={passwordIsValid}
       />
 
-      <Input
-        placeholder="Confirm Password"
-        value={enteredConfirmPassword}
-        onUpdateValue={(text) =>
-          updateInputValueHandler("confirmPassword", text)
-        }
-        secureTextEntry
-        isInvalid={confirmPasswordIsValid}
-      />
+      {!login && (
+        <Input
+          placeholder="Confirm Password"
+          value={enteredConfirmPassword}
+          onUpdateValue={(text) =>
+            updateInputValueHandler("confirmPassword", text)
+          }
+          secureTextEntry
+          isInvalid={confirmPasswordIsValid}
+        />
+      )}
 
-      <Input
-        placeholder="Username"
-        value={enteredUserName}
-        onUpdateValue={(text) => updateInputValueHandler("username", text)}
-        isInvalid={userNameIsValid}
-      />
+      {!login && (
+        <Input
+          placeholder="Username"
+          value={enteredUserName}
+          onUpdateValue={(text) => updateInputValueHandler("username", text)}
+          isInvalid={userNameIsValid}
+        />
+      )}
 
-      <TouchableOpacity style={AuthStyles.createButton} onPress={submitHandler}>
-        <Text style={AuthStyles.createText}>Create an account</Text>
+      {login && (
+        <TouchableOpacity>
+          <Text style={AuthStyles.forgetText}>forgot your ID/password?</Text>
+        </TouchableOpacity>
+      )}
+
+      <TouchableOpacity
+        style={login ? AuthStyles.loginButton : AuthStyles.createButton}
+        onPress={submitHandler}
+      >
+        <Text style={AuthStyles.createText}>
+          {login ? "Log in" : "Create an account"}
+        </Text>
       </TouchableOpacity>
     </>
   );

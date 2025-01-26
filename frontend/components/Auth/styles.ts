@@ -12,6 +12,9 @@ export const AuthStyles = StyleSheet.create({
     height: 121,
     marginBottom: 16,
   },
+  logoWithMargin: {
+    marginBottom: 60,
+  },
   paragraph: {
     margin: 24,
     fontSize: 20,
@@ -26,6 +29,27 @@ export const AuthStyles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#FF724C",
   },
+  loginButton: {
+    width: 203,
+    height: 63,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FF724C",
+  },
+  signupButton: {
+    width: 203,
+    height: 63,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#242C41",
+  },
+  signupText: {
+    color: "white",
+    fontFamily: "raleway-bold",
+    fontSize: 24,
+  },
   createText: {
     color: "#242C41",
     fontFamily: "raleway-bold",
@@ -39,7 +63,7 @@ export const AuthStyles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 22,
     paddingLeft: 13,
-    fontSize: 24,
+    fontSize: 18,
   },
   icons: {
     flexDirection: "row",
@@ -55,5 +79,10 @@ export const AuthStyles = StyleSheet.create({
   },
   invalid: {
     borderColor: "red",
+  },
+  forgetText: {
+    fontSize: 18,
+    textDecorationLine: "underline",
+    marginBottom: 25,
   },
 });
