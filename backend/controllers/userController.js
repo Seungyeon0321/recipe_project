@@ -4,9 +4,14 @@ const User = require("../models/user");
 
 const passport = require("passport");
 
+exports.test = async (req, res, next) => {
+  console.log(`get request`);
+  res.status(200).json({ status: "success" });
+};
+
 exports.createUser = async (req, res, next) => {
   try {
-    console.log("backend -");
+    console.log(`backend - ${req.body}`);
     //Check if the email is already used even the google or facebook account
     const existingUser = await User.findOne({
       userEmail: req.body.userEmail,

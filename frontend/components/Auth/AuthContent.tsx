@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import {
   View,
@@ -58,7 +59,6 @@ export default function AuthContent({
       });
       return;
     }
-    console.log("submitHandler, auth");
     onAuthenticate({ email, password, username });
   }
 
