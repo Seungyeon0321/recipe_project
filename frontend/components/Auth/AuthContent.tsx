@@ -45,7 +45,7 @@ export default function AuthContent({
 
   function submitHandler(credentials) {
     let { email, password, confirmPassword, username } = credentials;
-
+    console.log("clicked");
     email = email.trim();
     password = password.trim();
 
@@ -53,12 +53,17 @@ export default function AuthContent({
     const passwordIsValid = password.length > 6;
     const passwordsAreEqual = password === confirmPassword;
     const usernameIsValid = username.length > 0;
-
+    console.log(
+      emailIsValid,
+      passwordIsValid,
+      passwordsAreEqual,
+      usernameIsValid
+    );
     if (
       !emailIsValid ||
       !passwordIsValid ||
-      !passwordsAreEqual ||
-      !usernameIsValid
+      (!login && !passwordsAreEqual) ||
+      (!login && !usernameIsValid)
     ) {
       Alert.alert("Invalid input", "Please check your entered credentials.");
       setCredentialsInvalid({

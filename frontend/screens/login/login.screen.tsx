@@ -1,25 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AuthContent from "../../components/Auth/AuthContent";
-
+import { Login } from "../../components/util/auth";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Login() {
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
+export default function LoginScreen() {
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
 
-  const handleSignUpPress = () => {
-    navigation.navigate("Signup");
-  };
+  // const handleSignUpPress = () => {
+  //   navigation.navigate("Signup");
+  // };
 
-  const handleProceed = () => {
-    navigation.navigate("AppNavigator");
-  };
+  async function loginHandler(credentials: {
+    email: string;
+    password: string;
+  }) {
+    try {
+      setIsLoading(true);
+      let response = await Login(credentials);
+      return response;
+      setIsLoading(false);
+    } catch (error) {
+      console.info(error);
+    }
+  }
+
+  useEffect(() => {
+    if (response) {
+      navigation.navigate("AppNavigator");
+    }
+  }, [response]);
 
   return (
     <>
-      <AuthContent login={true} onAuthenticate={handleProceed} />
+      <AuthContent login={true} onAuthenticate={loginHandler} />
     </>
   );
 }
@@ -55,9 +70,7 @@ export default function Login() {
 
 //       <Text style={styles.paragraph}>OR</Text>
 
-//       <TouchableOpacity style={styles.signupButton} onPress={handleSignUpPress}>
-//         <Text style={styles.signupText}>Sign up</Text>
-//       </TouchableOpacity>
+//
 
 //       <StatusBar style="auto" />
 //     </SafeAreaView>
