@@ -1,5 +1,6 @@
 import axios from "axios";
 import client from "./client";
+import { Alert } from "react-native";
 
 async function auth(credentials: {
   mode: string;
@@ -19,7 +20,7 @@ async function auth(credentials: {
 
     return response;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
@@ -32,7 +33,7 @@ const Signup = async (credentials: {
 };
 
 const Login = async (credentials: { email: string; password: string }) => {
-  await auth({ mode: "login", ...credentials });
+  return await auth({ mode: "login", ...credentials });
 };
 
 export { Signup, Login };

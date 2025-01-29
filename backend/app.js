@@ -36,8 +36,8 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
   })
 );
 app.use(passport.initialize());
@@ -62,7 +62,6 @@ app.get(
 
 //endpoint login for google, need to redirect succeed page, need to navigate users to main Pages
 app.get("/auth/protected", isLoggedIn, (req, res) => {
-  console.log("hiiiiiiiii");
   let name = req.user.userName;
 
   res.status(200).json({ user: req.user });

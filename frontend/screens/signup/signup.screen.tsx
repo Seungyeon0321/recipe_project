@@ -18,6 +18,7 @@ export default function SignupScreen() {
   );
   const navigation = useNavigation();
 
+  //만약 오류가 난다면 어떻게 될 것인가,
   useEffect(() => {
     console.log(isAuthenticated);
     if (isAuthenticated) {

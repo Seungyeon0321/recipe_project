@@ -2,20 +2,27 @@ import React, { useState, useEffect } from "react";
 import AuthContent from "../../components/Auth/AuthContent";
 import { Login } from "../../components/util/auth";
 import { useNavigation } from "@react-navigation/native";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setIsAuthenticated } from "../../reducer/userSlice";
+import { RootState } from "../../store/store";
+import { Alert } from "react-native";
+import LoadingOverlay from "../../components/UI/LoadingOverlay";
 export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
 
-  // const handleSignUpPress = () => {
-  //   navigation.navigate("Signup");
-  // };
-  // useEffect(() => {
-  //   if (response) {
-  //     navigation.navigate("AppNavigator");
-  //   }
-  // }, [response]);
+  const dispatch = useDispatch();
+
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigation.navigate("AppNavigator");
+    }
+  }, [isAuthenticated]);
 
   async function loginHandler(credentials: {
     email: string;
@@ -24,11 +31,21 @@ export default function LoginScreen() {
     try {
       setIsLoading(true);
       let response = await Login(credentials);
-      setIsLoading(false);
-      return response;
+
+      if (response.data?.status === "success") {
+        dispatch(setIsAuthenticated(true));
+      } else {
+        Alert.alert("Login failed", response.data.message);
+      }
     } catch (error) {
       console.info(error);
+    } finally {
+      setIsLoading(false);
     }
+  }
+
+  if (isLoading) {
+    return <LoadingOverlay message="Logging in..." />;
   }
 
   return (

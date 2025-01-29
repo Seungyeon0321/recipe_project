@@ -4,11 +4,6 @@ const User = require("../models/user");
 
 const passport = require("passport");
 
-exports.test = async (req, res, next) => {
-  console.log(`get request`);
-  res.status(200).json({ status: "success" });
-};
-
 exports.createUser = async (req, res, next) => {
   try {
     console.log(`backend - ${req.body}`);
@@ -53,6 +48,7 @@ exports.loginWithLocal = (req, res, next) => {
       return next(err);
     }
     if (info) {
+      console.log("info", info);
       return res.status(401).send(info.reason);
     }
 
@@ -67,9 +63,15 @@ exports.loginWithLocal = (req, res, next) => {
         return next(loginErr);
       }
 
-      res.status(200).json({
+      const fullUserWithoutPassword = {
+        userEmail: user.userEmail,
+        password: undefined,
+        name: user.name,
+      };
+
+      return res.status(200).json({
         status: "success",
-        user: user,
+        user: fullUserWithoutPassword,
       });
     });
     //I cannot send all information about the user
@@ -105,7 +107,18 @@ exports.loginWithGoogle = async (req, res, next) => {
 
 exports.userLogout = (req, res, next) => {
   console.log("logout");
-  req.logout(() => {
-    res.send("ok");
+  req.logout((err) => {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+
+    req.session.destroy((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.clearCookie("connect.sid");
+      res.status(200).json({ status: "success" });
+    });
   });
 };
