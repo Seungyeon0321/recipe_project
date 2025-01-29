@@ -34,13 +34,15 @@ exports.createUser = async (req, res, next) => {
       name: req.body.name,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       status: "success",
       user: newUser,
     });
   } catch (error) {
-    console.log(error);
-    next(error);
+    return res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
   }
 };
 

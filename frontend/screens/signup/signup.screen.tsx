@@ -7,13 +7,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsAuthenticated } from "../../reducer/userSlice";
 import { RootState } from "../../store/store";
 import { useNavigation } from "@react-navigation/native";
+import { Alert } from "react-native";
+
 export default function SignupScreen() {
   const [isLoading, setIsLoading] = useState(false);
+
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
   const navigation = useNavigation();
+
+  useEffect(() => {
+    console.log(isAuthenticated);
+    if (isAuthenticated) {
+      navigation.navigate("AppNavigator");
+    }
+  }, [isAuthenticated]);
 
   async function signupHandler(credentials: {
     email: string;
@@ -22,9 +32,14 @@ export default function SignupScreen() {
   }) {
     try {
       setIsLoading(true);
-      await Signup(credentials);
-      setIsLoading(false);
-      dispatch(setIsAuthenticated(true));
+      const response = await Signup(credentials);
+
+      if (response.data.status === "success") {
+        setIsLoading(false);
+        dispatch(setIsAuthenticated(true));
+      } else {
+        Alert.alert("Signup failed", response.data.message);
+      }
     } catch (error) {
       console.info(error);
     }
@@ -33,12 +48,6 @@ export default function SignupScreen() {
   if (isLoading) {
     return <LoadingOverlay message="Creating user..." />;
   }
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigation.navigate("AppNavigator");
-    }
-  }, [isAuthenticated]);
 
   return (
     <>

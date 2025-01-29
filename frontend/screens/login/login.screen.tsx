@@ -11,6 +11,11 @@ export default function LoginScreen() {
   // const handleSignUpPress = () => {
   //   navigation.navigate("Signup");
   // };
+  // useEffect(() => {
+  //   if (response) {
+  //     navigation.navigate("AppNavigator");
+  //   }
+  // }, [response]);
 
   async function loginHandler(credentials: {
     email: string;
@@ -19,18 +24,12 @@ export default function LoginScreen() {
     try {
       setIsLoading(true);
       let response = await Login(credentials);
-      return response;
       setIsLoading(false);
+      return response;
     } catch (error) {
       console.info(error);
     }
   }
-
-  useEffect(() => {
-    if (response) {
-      navigation.navigate("AppNavigator");
-    }
-  }, [response]);
 
   return (
     <>

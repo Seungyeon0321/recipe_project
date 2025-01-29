@@ -28,7 +28,7 @@ const Signup = async (credentials: {
   password: string;
   username: string;
 }) => {
-  await auth({ mode: "signup", ...credentials });
+  return await auth({ mode: "signup", ...credentials });
 };
 
 const Login = async (credentials: { email: string; password: string }) => {
