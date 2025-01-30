@@ -45,22 +45,50 @@ exports.createUser = async (req, res, next) => {
 exports.loginWithLocal = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      return next(err);
-    }
-    if (info) {
-      console.log("info", info);
-      return res.status(401).send(info.reason);
+      return res.status(500).json({
+        status: "error",
+        message: "서버 내부 오류가 발생했습니다.",
+        error: err.message,
+      });
     }
 
-    //There is no user
+    if (info) {
+      // Passport에서 전달하는 실패 정보를 구체적으로 처리
+      let statusCode = 401;
+      let errorMessage = info.reason;
+
+      // 일반적인 로그인 실패 케이스들을 구분하여 처리
+      switch (info.type) {
+        case "email-not-found":
+          errorMessage = "존재하지 않는 이메일입니다.";
+          break;
+        case "wrong-password":
+          errorMessage = "비밀번호가 일치하지 않습니다.";
+          break;
+        default:
+          errorMessage = info.reason || "로그인에 실패했습니다.";
+      }
+
+      return res.status(statusCode).json({
+        status: "error",
+        message: errorMessage,
+      });
+    }
+
     if (!user) {
-      return res.redirect("/login");
+      return res.status(401).json({
+        status: "error",
+        message: "로그인에 실패했습니다. 다시 시도해주세요.",
+      });
     }
 
     return req.login(user, async (loginErr) => {
       if (loginErr) {
-        console.error(loginErr);
-        return next(loginErr);
+        return res.status(500).json({
+          status: "error",
+          message: "로그인 처리 중 오류가 발생했습니다.",
+          error: loginErr.message,
+        });
       }
 
       const fullUserWithoutPassword = {
@@ -74,9 +102,6 @@ exports.loginWithLocal = (req, res, next) => {
         user: fullUserWithoutPassword,
       });
     });
-    //I cannot send all information about the user
-
-    // });
   })(req, res, next);
 };
 

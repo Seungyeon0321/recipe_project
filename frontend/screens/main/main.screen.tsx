@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import { MainStyles } from "./main.styles";
-import Thumbnail from "../../assets/images/components/thumbnail";
+import Thumbnail from "../../components/UI/thumbnail";
 import { FoodData } from "./foodData";
 
 export const enum ETutorialStep {
@@ -33,14 +33,14 @@ const getContainerPosition = (
 };
 
 export default function MainScreen() {
-  const { rootContainer, search, searchIcon } = MainStyles;
+  const { rootContainer, search, searchIcon, textInput } = MainStyles;
   return (
     <SafeAreaView style={rootContainer}>
       <ScrollView>
         <View style={search}>
           <TextInput
+            style={textInput}
             placeholder="what are you cooking today?"
-            fontStyle="italic"
           />
           <Image
             style={searchIcon}
