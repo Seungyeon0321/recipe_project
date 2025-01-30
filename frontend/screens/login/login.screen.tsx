@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import AuthContent from "../../components/Auth/AuthContent";
-import { Login } from "../../components/util/auth";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { setIsAuthenticated } from "../../reducer/userSlice";
+import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { Alert } from "react-native";
 import LoadingOverlay from "../../components/UI/LoadingOverlay";
+import { UseSubmitHandler } from "../../components/util/submitHandler";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+type RootStackParamList = {
+  AppNavigator: undefined;
+};
+
 export default function LoginScreen() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const navigation = useNavigation();
-
-  const dispatch = useDispatch();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
@@ -24,25 +25,27 @@ export default function LoginScreen() {
     }
   }, [isAuthenticated]);
 
-  async function loginHandler(credentials: {
-    email: string;
-    password: string;
-  }) {
-    try {
-      setIsLoading(true);
-      let response = await Login(credentials);
+  const { handleSubmit, isLoading } = UseSubmitHandler();
 
-      if (response.data?.status === "success") {
-        dispatch(setIsAuthenticated(true));
-      } else {
-        Alert.alert("Login failed", response.data.message);
-      }
-    } catch (error) {
-      console.info(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  // async function loginHandler(credentials: {
+  //   email: string;
+  //   password: string;
+  // }) {
+  //   try {
+  //     setIsLoading(true);
+  //     let response = await Login(credentials);
+
+  //     if (response.data?.status === "success") {
+  //       dispatch(setIsAuthenticated(true));
+  //     } else {
+  //       Alert.alert("Login failed", response.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.info(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }
 
   if (isLoading) {
     return <LoadingOverlay message="Logging in..." />;
@@ -50,7 +53,10 @@ export default function LoginScreen() {
 
   return (
     <>
-      <AuthContent login={true} onAuthenticate={loginHandler} />
+      <AuthContent
+        login={true}
+        onAuthenticate={(credentials) => handleSubmit(credentials, "login")}
+      />
     </>
   );
 }

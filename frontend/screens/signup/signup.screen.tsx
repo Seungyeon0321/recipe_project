@@ -1,24 +1,25 @@
 import React from "react";
 import AuthContent from "../../components/Auth/AuthContent";
-import { Signup } from "../../components/util/auth";
 import { useState, useEffect } from "react";
 import LoadingOverlay from "../../components/UI/LoadingOverlay";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsAuthenticated } from "../../reducer/userSlice";
 import { RootState } from "../../store/store";
 import { useNavigation } from "@react-navigation/native";
-import { Alert } from "react-native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UseSubmitHandler } from "../../components/util/submitHandler";
+
+type RootStackParamList = {
+  AppNavigator: undefined;
+};
 
 export default function SignupScreen() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const dispatch = useDispatch();
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
-  const navigation = useNavigation();
 
-  //만약 오류가 난다면 어떻게 될 것인가,
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   useEffect(() => {
     console.log(isAuthenticated);
     if (isAuthenticated) {
@@ -26,25 +27,7 @@ export default function SignupScreen() {
     }
   }, [isAuthenticated]);
 
-  async function signupHandler(credentials: {
-    email: string;
-    password: string;
-    username: string;
-  }) {
-    try {
-      setIsLoading(true);
-      const response = await Signup(credentials);
-
-      if (response.data.status === "success") {
-        setIsLoading(false);
-        dispatch(setIsAuthenticated(true));
-      } else {
-        Alert.alert("Signup failed", response.data.message);
-      }
-    } catch (error) {
-      console.info(error);
-    }
-  }
+  const { handleSubmit, isLoading } = UseSubmitHandler();
 
   if (isLoading) {
     return <LoadingOverlay message="Creating user..." />;
@@ -52,7 +35,10 @@ export default function SignupScreen() {
 
   return (
     <>
-      <AuthContent onAuthenticate={signupHandler} login={false} />
+      <AuthContent
+        onAuthenticate={(credentials) => handleSubmit(credentials, "signup")}
+        login={false}
+      />
     </>
   );
 }

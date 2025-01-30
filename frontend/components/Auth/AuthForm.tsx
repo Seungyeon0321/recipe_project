@@ -28,7 +28,7 @@ export default function AuthForm({
   const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
   const [enteredUserName, setEnteredUserName] = useState("");
-  console.log(login);
+
   const {
     email: emailIsValid,
     password: passwordIsValid,
