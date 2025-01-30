@@ -1,16 +1,16 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
+import AppNavigator from "./main/navigation";
+import store from "./store/store";
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AppNavigator from "./main/navigation";
+import { Provider, useSelector } from "react-redux";
+import { RootState } from "./store/store";
 import Greeting from "./screens/landing/greeting.screen";
 import Signup from "./screens/signup/signup.screen";
 import Login from "./screens/login/login.screen";
 import LoadingOverlay from "./components/UI/LoadingOverlay";
-import { Provider, useSelector } from "react-redux";
-import store from "./store/store";
-import { RootState } from "./store/store";
+import PostDetails from "./screens/postDetailPage/postDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +42,11 @@ function AuthenticatedStack() {
       <Stack.Screen
         name="AppNavigator"
         component={AppNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PostDetails"
+        component={PostDetails}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
