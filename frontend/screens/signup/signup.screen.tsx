@@ -6,16 +6,16 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { UseSubmitHandler } from "../../components/util/submitHandler";
 
 type RootStackParamList = {
   AppNavigator: undefined;
 };
 
 export default function SignupScreen() {
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.user.isAuthenticated
-  );
+  const { isAuthenticated, isLoading } = useSelector((state: RootState) => ({
+    isAuthenticated: state.user.isAuthenticated,
+    isLoading: state.user.loading,
+  }));
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -27,18 +27,13 @@ export default function SignupScreen() {
     }
   }, [isAuthenticated]);
 
-  const { handleSubmit, isLoading } = UseSubmitHandler();
-
   if (isLoading) {
     return <LoadingOverlay message="Creating user..." />;
   }
 
   return (
     <>
-      <AuthContent
-        onAuthenticate={(credentials) => handleSubmit(credentials, "signup")}
-        login={false}
-      />
+      <AuthContent login={false} />
     </>
   );
 }

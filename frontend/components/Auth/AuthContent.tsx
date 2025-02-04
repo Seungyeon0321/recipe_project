@@ -5,7 +5,6 @@ import {
   Alert,
   TouchableOpacity,
   Text,
-  StatusBar,
   Image,
   SafeAreaView,
 } from "react-native";
@@ -20,17 +19,7 @@ type ProfileNavigationProp = {
   navigate: (screen: string) => void;
 };
 
-export default function AuthContent({
-  onAuthenticate,
-  login,
-}: {
-  onAuthenticate: (credentials: {
-    email: string;
-    password: string;
-    username: string;
-  }) => void;
-  login?: boolean;
-}) {
+export default function AuthContent({ login }: { login?: boolean }) {
   const navigation = useNavigation<ProfileNavigationProp>();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -51,8 +40,12 @@ export default function AuthContent({
     logoWithMargin,
   } = AuthStyles;
 
-  async function submitHandler(credentials) {
-    console.log("Click, submitHandler!");
+  async function submitHandler(credentials: {
+    email: string;
+    password: string;
+    confirmPassword?: string;
+    username?: string;
+  }) {
     let { email, password, confirmPassword, username } = credentials;
 
     email = email.trim();
@@ -87,7 +80,7 @@ export default function AuthContent({
     const resultAction = await dispatch(action);
 
     if (loginUser.fulfilled.match(resultAction)) {
-      navigation.navigate("Home");
+      navigation.navigate("AppNavigator");
     }
   }
 

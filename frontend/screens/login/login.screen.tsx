@@ -4,7 +4,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import LoadingOverlay from "../../components/UI/LoadingOverlay";
-import { UseSubmitHandler } from "../../components/util/submitHandler";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type RootStackParamList = {
@@ -15,9 +14,10 @@ export default function LoginScreen() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.user.isAuthenticated
-  );
+  const { isAuthenticated, isLoading } = useSelector((state: RootState) => ({
+    isAuthenticated: state.user.isAuthenticated,
+    isLoading: state.user.loading,
+  }));
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,18 +25,13 @@ export default function LoginScreen() {
     }
   }, [isAuthenticated]);
 
-  const { handleSubmit, isLoading } = UseSubmitHandler();
-
   if (isLoading) {
     return <LoadingOverlay message="Logging in..." />;
   }
 
   return (
     <>
-      <AuthContent
-        login={true}
-        onAuthenticate={(credentials) => handleSubmit(credentials, "login")}
-      />
+      <AuthContent login={true} />
     </>
   );
 }
