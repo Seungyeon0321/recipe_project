@@ -82,6 +82,7 @@ exports.loginWithLocal = (req, res, next) => {
       });
     }
 
+    //req.login을 통해서 passport.serializeuser()가 실행됨, LoginErr은 해당 세션 저장과 관련있는 오류가 발생할 수 있음
     return req.login(user, async (loginErr) => {
       if (loginErr) {
         return res.status(500).json({

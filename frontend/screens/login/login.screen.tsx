@@ -27,26 +27,6 @@ export default function LoginScreen() {
 
   const { handleSubmit, isLoading } = UseSubmitHandler();
 
-  // async function loginHandler(credentials: {
-  //   email: string;
-  //   password: string;
-  // }) {
-  //   try {
-  //     setIsLoading(true);
-  //     let response = await Login(credentials);
-
-  //     if (response.data?.status === "success") {
-  //       dispatch(setIsAuthenticated(true));
-  //     } else {
-  //       Alert.alert("Login failed", response.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.info(error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // }
-
   if (isLoading) {
     return <LoadingOverlay message="Logging in..." />;
   }

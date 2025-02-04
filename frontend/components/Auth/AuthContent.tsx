@@ -12,6 +12,13 @@ import {
 import AuthForm from "./AuthForm";
 import { AuthStyles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import { loginUser, signupUser } from "../../reducer/userSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store/store";
+
+type ProfileNavigationProp = {
+  navigate: (screen: string) => void;
+};
 
 export default function AuthContent({
   onAuthenticate,
@@ -24,7 +31,8 @@ export default function AuthContent({
   }) => void;
   login?: boolean;
 }) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<ProfileNavigationProp>();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     email: false,
@@ -43,9 +51,10 @@ export default function AuthContent({
     logoWithMargin,
   } = AuthStyles;
 
-  function submitHandler(credentials) {
+  async function submitHandler(credentials) {
+    console.log("Click, submitHandler!");
     let { email, password, confirmPassword, username } = credentials;
-   
+
     email = email.trim();
     password = password.trim();
 
@@ -53,7 +62,7 @@ export default function AuthContent({
     const passwordIsValid = password.length > 6;
     const passwordsAreEqual = password === confirmPassword;
     const usernameIsValid = username.length > 0;
-   
+
     if (
       !emailIsValid ||
       !passwordIsValid ||
@@ -69,7 +78,17 @@ export default function AuthContent({
       });
       return;
     }
-    onAuthenticate({ email, password, username });
+
+    const action = login
+      ? loginUser({ email, password })
+      : signupUser({ email, password, username });
+    console.log(action);
+
+    const resultAction = await dispatch(action);
+
+    if (loginUser.fulfilled.match(resultAction)) {
+      navigation.navigate("Home");
+    }
   }
 
   function handleLogInPress() {
