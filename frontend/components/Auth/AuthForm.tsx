@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Input from "./Input";
 import { AuthStyles } from "./styles";
 import { TouchableOpacity, Text } from "react-native";
+import CustomButton from "../UI/Button";
 
 interface AuthFormProps {
   credentialsInvalid: {
@@ -107,14 +108,21 @@ export default function AuthForm({
         </TouchableOpacity>
       )}
 
+      <CustomButton
+        buttonStyle={login ? AuthStyles.loginButton : AuthStyles.createButton}
+        textStyle={AuthStyles.createText}
+        text={login ? "Log in" : "Create an account"}
+        onPress={submitHandler}
+      />
+      {/* 
       <TouchableOpacity
-        style={login ? AuthStyles.loginButton : AuthStyles.createButton}
+        buttonStyle={login ? AuthStyles.loginButton : AuthStyles.createButton}
         onPress={submitHandler}
       >
-        <Text style={AuthStyles.createText}>
+        <Text Textstyle={AuthStyles.createText}>
           {login ? "Log in" : "Create an account"}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </>
   );
 }
