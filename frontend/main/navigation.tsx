@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image } from "react-native";
 import { MainScreen } from "../screens/mainPage/main.screen";
 import { SavedScreen } from "../screens/saved/saved.screen";
-import { PostingScreen } from "../screens/posting/posting.screen";
+import { PostingScreen } from "../screens/posting/posting.screen"
 import { FavoritedScreen } from "../screens/favorited/favorited.screen";
 import { ProfileScreen } from "../screens/profile/profile.screen";
 
