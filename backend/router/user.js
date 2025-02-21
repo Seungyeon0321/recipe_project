@@ -11,6 +11,7 @@ router.post("/signup", isNotLoggedIn, userController.createUser);
 
 // Local login
 router.post("/login", isNotLoggedIn, userController.loginWithLocal);
+router.get("/me", isNotLoggedIn, userController.getUser);
 
 // Google login
 router.get(

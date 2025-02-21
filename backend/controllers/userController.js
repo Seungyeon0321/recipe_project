@@ -148,3 +148,15 @@ exports.userLogout = (req, res, next) => {
     });
   });
 };
+
+exports.getUser = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      res.status(400).json({ status: "You need to login first" });
+    }
+
+    res.status(200).json({ status: "success", user: req.user });
+  } catch (error) {
+    console.error(error);
+  }
+};
