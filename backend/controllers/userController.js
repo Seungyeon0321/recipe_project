@@ -1,12 +1,15 @@
 const User = require("../models/user");
-
+const jwt = require("jsonwebtoken");
 // const GoogleAndFaceBookUser = require("../models/google");
-
 const passport = require("passport");
+
+const jwtToken = (user) =>
+  jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
 
 exports.createUser = async (req, res, next) => {
   try {
-    console.log(`backend - ${req.body}`);
     //Check if the email is already used even the google or facebook account
     const existingUser = await User.findOne({
       userEmail: req.body.userEmail,
@@ -29,9 +32,12 @@ exports.createUser = async (req, res, next) => {
       name: req.body.name,
     });
 
+    const token = jwtToken(newUser);
+
     return res.status(201).json({
       status: "success",
       user: newUser,
+      token,
     });
   } catch (error) {
     return res.status(400).json({
@@ -53,23 +59,20 @@ exports.loginWithLocal = (req, res, next) => {
     }
 
     if (info) {
-      // Passport에서 전달하는 실패 정보를 구체적으로 처리
-      let statusCode = 401;
       let errorMessage = info.reason;
 
-      // 일반적인 로그인 실패 케이스들을 구분하여 처리
       switch (info.type) {
         case "email-not-found":
-          errorMessage = "존재하지 않는 이메일입니다.";
+          errorMessage = "The email address is not found";
           break;
         case "wrong-password":
-          errorMessage = "비밀번호가 일치하지 않습니다.";
+          errorMessage = "The password is incorrect";
           break;
         default:
-          errorMessage = info.reason || "로그인에 실패했습니다.";
+          errorMessage = info.reason || "Login failed";
       }
 
-      return res.status(statusCode).json({
+      return res.status(401).json({
         status: "error",
         message: errorMessage,
       });
@@ -78,7 +81,7 @@ exports.loginWithLocal = (req, res, next) => {
     if (!user) {
       return res.status(401).json({
         status: "error",
-        message: "로그인에 실패했습니다. 다시 시도해주세요.",
+        message: "Login failed",
       });
     }
 
@@ -87,7 +90,7 @@ exports.loginWithLocal = (req, res, next) => {
       if (loginErr) {
         return res.status(500).json({
           status: "error",
-          message: "로그인 처리 중 오류가 발생했습니다.",
+          message: "Login failed",
           error: loginErr.message,
         });
       }
@@ -98,9 +101,12 @@ exports.loginWithLocal = (req, res, next) => {
         name: user.name,
       };
 
+      const token = jwtToken(user);
+
       return res.status(200).json({
         status: "success",
         user: fullUserWithoutPassword,
+        token,
       });
     });
   })(req, res, next);
@@ -150,17 +156,14 @@ exports.userLogout = (req, res, next) => {
 };
 
 exports.getUser = async (req, res, next) => {
-  try {
-
-    if (!req.session.cookie) {
-      return res.status(400).json({ status: "You need to login first" });
+  passport.authenticate("jwt", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).json({ status: "You need to login first" });
     }
 
-    return res
-      .status(200)
-      .json({ status: "success", cookie: req.session.cookie });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ status: "Server error" });
-  }
+    return res.status(200).json({ status: "success", user });
+  })(req, res, next);
 };

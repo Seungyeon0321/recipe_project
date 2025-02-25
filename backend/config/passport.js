@@ -4,8 +4,15 @@ const dotenv = require("dotenv");
 const User = require("../models/user");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const { Strategy: LocalStrategy } = require("passport-local");
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 
 dotenv.config();
+
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrPrivateKey: process.env.JWT_SECRET,
+};
 
 module.exports = {
   localStrategy: () => {
@@ -88,6 +95,25 @@ module.exports = {
           }
         }
       )
+    );
+  },
+
+  jwtStrategy: () => {
+    passport.use(
+      new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
+        try {
+          console.log("jwtPayload", jwtPayload);
+          const user = await User.findById(jwtPayload.id);
+
+          if (user) {
+            return done(null, user);
+          } else {
+            return done(null, false);
+          }
+        } catch (error) {
+          return done(error, false);
+        }
+      })
     );
   },
 };
