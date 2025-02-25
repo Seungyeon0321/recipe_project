@@ -76,12 +76,11 @@ export default function AuthContent({ login }: { login?: boolean }) {
       ? loginUser({ email, password })
       : signupUser({ email, password, username });
 
+    //submit the action
     const resultAction = await dispatch(action);
-    console.log(resultAction)
-
 
     if (loginUser.fulfilled.match(resultAction)) {
-      console.log('login!!!')
+      console.log("login!!!");
       navigation.navigate("AppNavigator");
     }
   }

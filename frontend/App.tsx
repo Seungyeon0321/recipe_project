@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AppNavigator from "./main/navigation";
 import store from "./store/store";
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Provider, useSelector } from "react-redux";
+import { Provider, useSelector, useDispatch } from "react-redux";
 import { RootState } from "./store/store";
 import Greeting from "./screens/landing/greeting.screen";
 import Signup from "./screens/signup/signup.screen";
 import Login from "./screens/login/login.screen";
 import LoadingOverlay from "./components/UI/LoadingOverlay";
 import PostDetails from "./screens/postDetailPage/postDetails";
-
+import { getUser } from "./reducer/userSlice";
+import { AppDispatch } from "./store/store";
 const Stack = createNativeStackNavigator();
 
 function AuthStack() {
@@ -54,9 +55,20 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.user.isAuthenticated
-  );
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
+
+  const { isAuthenticated, isLoading } = useSelector((state: RootState) => ({
+    isAuthenticated: state.user.isAuthenticated,
+    isLoading: state.user.loading,
+  }));
+
+  if (isLoading) {
+    return <LoadingOverlay message="Loading..." />;
+  }
 
   return isAuthenticated ? <AuthenticatedStack /> : <AuthStack />;
 }

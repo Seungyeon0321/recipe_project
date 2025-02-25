@@ -2,6 +2,18 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import client from "../components/util/client";
 
+export const getUser = createAsyncThunk(
+  "user/me",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${client.defaults.baseURL}/user/me`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Login failed");
+    }
+  }
+);
+
 export const loginUser = createAsyncThunk(
   "user/login",
   async (
@@ -12,7 +24,6 @@ export const loginUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log(client.defaults.baseURL, credentials);
       const response = await axios.post(
         `${client.defaults.baseURL}/user/login`,
         {
@@ -76,6 +87,18 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
