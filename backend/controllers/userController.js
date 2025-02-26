@@ -156,9 +156,6 @@ exports.userLogout = (req, res, next) => {
 };
 
 exports.getUser = (req, res) => {
-  // JWT 인증은 이미 라우터의 미들웨어에서 처리되었으므로,
-  // 여기서는 단순히 인증된 사용자 정보만 반환합니다.
-  console.log('what!@!??')
   if (!req.user) {
     return res.status(401).json({ status: "You need to login first" });
   }

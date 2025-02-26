@@ -4,11 +4,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { useState } from "react";
 import AddButton from "../UI/AddButton";
 
-export default function Add_ingrediences() {
-  const [ingredients, setIngredients] = useState([
-    { id: 1, name: "", amount: "", unit: "" },
-  ]);
-
+export default function Add_ingrediences({ ingredients, setIngredients }) {
   const [selectedUnit, setSelectedUnit] = useState("");
 
   const data = [
@@ -33,6 +29,8 @@ export default function Add_ingrediences() {
   const { title, input_box, ingredient_box, number_text, ing_input_container } =
     MainStyles;
 
+  console.log("ingredients", ingredients);
+
   return (
     <>
       <Text style={title}>What's the ingredients?</Text>
@@ -45,13 +43,13 @@ export default function Add_ingrediences() {
                 style={[input_box, { flex: 4, marginRight: 10 }]}
                 placeholder="type here.."
                 value={ingredient.name}
-                onChangeText={(text) =>
+                onChangeText={(text) => {
                   setIngredients(
                     ingredients.map((ing) =>
                       ing.id === ingredient.id ? { ...ing, name: text } : ing
                     )
-                  )
-                }
+                  );
+                }}
               />
               <TextInput
                 style={[input_box, { flex: 3, marginRight: 10 }]}

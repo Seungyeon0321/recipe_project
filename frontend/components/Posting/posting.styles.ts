@@ -26,7 +26,7 @@ export const MainStyles = StyleSheet.create({
   },
   number_text: {
     fontFamily: "raleway-bold",
-    fontSize: 18,
+    fontSize: 20,
     marginRight: 10,
   },
   ingredient_box: {

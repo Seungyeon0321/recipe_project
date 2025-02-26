@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { Text, View, TextInput, TouchableOpacity, Image } from "react-native";
-import { MainStyles } from "../../screens/posting/posting.styles";
+import { MainStyles } from "./posting.styles";
 import AddButton from "../UI/AddButton";
 
-export default function AddInstructions() {
-  const [instructions, setInstructions] = useState([
-    { id: 1, instruction: "" },
-  ]);
-
+export default function AddInstructions({ instructions, setInstructions }) {
   const { title, instruction_box, number_text, input_box } = MainStyles;
 
   const addInstruction = () => {
@@ -28,14 +24,17 @@ export default function AddInstructions() {
   return (
     <>
       <Text style={title}>Now, share your instructions!</Text>
-      <View style={instruction_box}>
-        <Text style={number_text}>1</Text>
-        <TextInput
-          style={input_box}
-          placeholder="Add your instructions here..."
-        />
-      </View>
-
+      {instructions.map((v) => (
+        <View style={instruction_box} key={v.id}>
+          <Text style={number_text}>{v.id}</Text>
+          <TextInput
+            style={input_box}
+            value={v.instruction}
+            placeholder="Add your instructions here..."
+            onChangeText={(text) => handleInstructionChange(v.id, text)}
+          />
+        </View>
+      ))}
       <AddButton onPress={addInstruction} />
     </>
   );

@@ -84,6 +84,7 @@ export interface UserState {
   loading: boolean;
   error: string | null;
   user: string | null;
+  token: string | null;
 }
 
 const initialState: UserState = {
@@ -91,6 +92,7 @@ const initialState: UserState = {
   loading: false,
   error: null,
   user: null,
+  token: null,
 };
 
 const userSlice = createSlice({
@@ -123,6 +125,7 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
+        state.user = action.payload.userEmail;
         state.token = action.payload.token;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -136,6 +139,8 @@ const userSlice = createSlice({
       .addCase(signupUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
+        state.token = action.payload.token;
+        state.user = action.payload.userEmail;
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;

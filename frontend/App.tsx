@@ -61,7 +61,6 @@ function Navigation() {
   useEffect(() => {
     async function fetchUser() {
       const token = await getToken();
-      console.log("dispatch-token", token);
       if (token) {
         dispatch(getUser(token));
       }
@@ -77,8 +76,6 @@ function Navigation() {
   if (isLoading) {
     return <LoadingOverlay message="Loading..." />;
   }
-
-  console.log("response", user);
 
   return user ? <AuthenticatedStack /> : <AuthStack />;
 }
