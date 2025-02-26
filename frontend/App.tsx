@@ -61,6 +61,7 @@ function Navigation() {
   useEffect(() => {
     async function fetchUser() {
       const token = await getToken();
+      console.log("dispatch-token", token);
       if (token) {
         dispatch(getUser(token));
       }
@@ -68,21 +69,18 @@ function Navigation() {
     fetchUser();
   }, []);
 
-  const { isAuthenticated, isLoading, token } = useSelector(
-    (state: RootState) => ({
-      isAuthenticated: state.user.isAuthenticated,
-      isLoading: state.user.loading,
-      token: state.user.token,
-    })
-  );
+  const { isLoading, user } = useSelector((state: RootState) => ({
+    isLoading: state.user.loading,
+    user: state.user.user,
+  }));
 
   if (isLoading) {
     return <LoadingOverlay message="Loading..." />;
   }
 
-  console.log(token, isAuthenticated);
+  console.log("response", user);
 
-  return isAuthenticated && token ? <AuthenticatedStack /> : <AuthStack />;
+  return user ? <AuthenticatedStack /> : <AuthStack />;
 }
 
 export default function App() {

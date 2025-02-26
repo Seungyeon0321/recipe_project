@@ -11,7 +11,11 @@ router.post("/signup", isNotLoggedIn, userController.createUser);
 // Local login
 router.post("/login", isNotLoggedIn, userController.loginWithLocal);
 
-router.post("/me", isLoggedIn, userController.getUser);
+router.post(
+  "/me",
+  passport.authenticate("jwt", { session: false }),
+  userController.getUser
+);
 
 // Google login
 router.get(
