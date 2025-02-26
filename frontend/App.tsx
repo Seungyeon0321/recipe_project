@@ -13,6 +13,7 @@ import LoadingOverlay from "./components/UI/LoadingOverlay";
 import PostDetails from "./screens/postDetailPage/postDetails";
 import { getUser } from "./reducer/userSlice";
 import { AppDispatch } from "./store/store";
+import { getToken } from "./components/util/storage";
 const Stack = createNativeStackNavigator();
 
 function AuthStack() {
@@ -58,19 +59,30 @@ function Navigation() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(getUser());
+    async function fetchUser() {
+      const token = await getToken();
+      if (token) {
+        dispatch(getUser(token));
+      }
+    }
+    fetchUser();
   }, []);
 
-  const { isAuthenticated, isLoading } = useSelector((state: RootState) => ({
-    isAuthenticated: state.user.isAuthenticated,
-    isLoading: state.user.loading,
-  }));
+  const { isAuthenticated, isLoading, token } = useSelector(
+    (state: RootState) => ({
+      isAuthenticated: state.user.isAuthenticated,
+      isLoading: state.user.loading,
+      token: state.user.token,
+    })
+  );
 
   if (isLoading) {
     return <LoadingOverlay message="Loading..." />;
   }
 
-  return isAuthenticated ? <AuthenticatedStack /> : <AuthStack />;
+  console.log(token, isAuthenticated);
+
+  return isAuthenticated && token ? <AuthenticatedStack /> : <AuthStack />;
 }
 
 export default function App() {

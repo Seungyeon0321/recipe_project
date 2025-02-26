@@ -5,13 +5,13 @@ const userController = require("../controllers/userController");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
 const router = express.Router();
-
 // Sign up
 router.post("/signup", isNotLoggedIn, userController.createUser);
 
 // Local login
 router.post("/login", isNotLoggedIn, userController.loginWithLocal);
-router.get("/me", isNotLoggedIn, userController.getUser);
+
+router.post("/me", isLoggedIn, userController.getUser);
 
 // Google login
 router.get(

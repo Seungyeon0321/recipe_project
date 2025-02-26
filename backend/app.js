@@ -16,6 +16,7 @@ const likeRouter = require("./router/like");
 
 passportConfig.localStrategy();
 passportConfig.googleStrategy();
+passportConfig.jwtStrategy();
 
 app.use(morgan("tiny"));
 app.use(express.json());

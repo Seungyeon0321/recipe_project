@@ -156,14 +156,10 @@ exports.userLogout = (req, res, next) => {
 };
 
 exports.getUser = async (req, res, next) => {
-  passport.authenticate("jwt", (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.status(401).json({ status: "You need to login first" });
-    }
-
-    return res.status(200).json({ status: "success", user });
-  })(req, res, next);
+  passport.authenticate("jwt", { session: false })(req, res, next);
+  try {
+    res.json(req.user);
+  } catch (error) {
+    console.log(error);
+  }
 };

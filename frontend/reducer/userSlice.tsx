@@ -4,9 +4,16 @@ import client from "../components/util/client";
 
 export const getUser = createAsyncThunk(
   "user/me",
-  async (_, { rejectWithValue }) => {
+  async (token: string, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${client.defaults.baseURL}/user/me`);
+      const response = await axios.get(`${client.defaults.baseURL}/user/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("response", response);
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Login failed");
@@ -68,12 +75,14 @@ export interface UserState {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
+  token: string | null;
 }
 
 const initialState: UserState = {
   isAuthenticated: false,
   loading: false,
   error: null,
+  token: null,
 };
 
 const userSlice = createSlice({
@@ -94,6 +103,7 @@ const userSlice = createSlice({
       .addCase(getUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
+        state.token = action.payload.token;
       })
       .addCase(getUser.rejected, (state, action) => {
         state.loading = false;
@@ -106,6 +116,7 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
+        state.token = action.payload.token;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

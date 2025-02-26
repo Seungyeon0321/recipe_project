@@ -11,7 +11,7 @@ dotenv.config();
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrPrivateKey: process.env.JWT_SECRET,
+  secretOrKey: process.env.JWT_SECRET,
 };
 
 module.exports = {
@@ -103,6 +103,7 @@ module.exports = {
       new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
         try {
           console.log("jwtPayload", jwtPayload);
+
           const user = await User.findById(jwtPayload.id);
 
           if (user) {

@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { loginUser, signupUser } from "../../reducer/userSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
+import { storeToken, getToken, removeToken } from "../util/storage";
 
 type ProfileNavigationProp = {
   navigate: (screen: string) => void;
@@ -79,8 +80,10 @@ export default function AuthContent({ login }: { login?: boolean }) {
     //submit the action
     const resultAction = await dispatch(action);
 
+    console.log("resultAction", resultAction);
+
     if (loginUser.fulfilled.match(resultAction)) {
-      console.log("login!!!");
+      await storeToken(resultAction.payload.token);
       navigation.navigate("AppNavigator");
     }
   }
