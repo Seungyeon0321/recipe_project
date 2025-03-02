@@ -79,7 +79,7 @@ export const signupUser = createAsyncThunk(
   }
 );
 
-export interface UserState {
+interface UserState {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
@@ -102,6 +102,8 @@ const userSlice = createSlice({
     logout: (state) => {
       state.isAuthenticated = false;
       state.error = null;
+      state.user = null;
+      state.token = null;
     },
   },
   extraReducers: (builder) => {

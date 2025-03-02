@@ -80,6 +80,8 @@ export default function AuthContent({ login }: { login?: boolean }) {
     //submit the action
     const resultAction = await dispatch(action);
 
+    console.log("resultAction", resultAction.payload);
+
     if (loginUser.fulfilled.match(resultAction)) {
       await storeToken(resultAction.payload.token);
       navigation.navigate("AppNavigator");

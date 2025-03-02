@@ -8,15 +8,17 @@ const { client } = require("../server");
 //The Id below will be brought by the login information
 exports.createPosts = async (req, res, next) => {
   try {
+    console.log("click2");
     // Logged을 요구는 게시물을 포스팅하려고 + 버튼을 눌렀을 때 handling하는 게 좋아보임, 바로 url을 입력해서
     // 게시물에 포스팅은 미들웨어로 막아줌
+    console.log("req.body", req.body);
     const userId = req.user.id;
 
     const images = req.body.images;
 
     const newPost = await Post.create({
       title: req.body.title,
-      image: req.body.image,
+      image: req.body.foodImage,
       ingredients: req.body.ingredients,
       instructions: req.body.instructions,
       userId,

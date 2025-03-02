@@ -1,12 +1,22 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, Image, ScrollView } from "react-native";
+import { Text, View, TextInput, Image, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDispatch, useSelector } from "react-redux";
 import { MainStyles } from "./posting.styles";
 import CustomButton from "../../components/UI/Button";
 import Add_ingrediences from "../../components/Posting/Add_ingrediences";
 import Add_instructions from "../../components/Posting/Add_instructions";
+import { useNavigation } from "@react-navigation/native";
+import { createPost } from "../../reducer/postSlice";
+import { RootState, AppDispatch } from "../../store/store";
+
+type ProfileNavigationProp = {
+  navigate: (screen: string) => void;
+};
 
 export function PostingScreen() {
+  const token = useSelector((state: RootState) => state.user.token);
+
   const [foodTitle, setFoodTitle] = useState("");
   const [foodImage, setFoodImage] = useState("");
   const [instructions, setInstructions] = useState([
@@ -15,6 +25,9 @@ export function PostingScreen() {
   const [ingredients, setIngredients] = useState([
     { id: 1, name: "", amount: "", unit: "" },
   ]);
+
+  const navigation = useNavigation<ProfileNavigationProp>();
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     rootContainer,
@@ -25,7 +38,34 @@ export function PostingScreen() {
     button_container,
   } = MainStyles;
 
-  console.log("ingredients", ingredients);
+  const submitHandler = () => {
+    foodTitle.trim();
+    foodImage.trim();
+
+    let foodTitleIsValid = foodTitle.length > 0;
+    // let foodImageIsValid = foodImage.length > 0;
+    let instructionsIsValid = instructions.length > 0;
+    let ingredientsIsValid = ingredients.length > 0;
+
+    if (!foodTitleIsValid || !instructionsIsValid || !ingredientsIsValid) {
+      return Alert.alert(
+        `Please fill ${!foodTitleIsValid ? "title" : ""} ${
+          !instructionsIsValid ? "instructions" : ""
+        } ${!ingredientsIsValid ? "ingredients" : ""}`
+      );
+    }
+
+    //이렇게 하지 않으면 non-serializable error가 발생함
+    let postData = {
+      foodTitle,
+      foodImage,
+      instructions,
+      ingredients,
+      token,
+    };
+    console.log("postData", postData);
+    dispatch(createPost(postData));
+  };
 
   return (
     <SafeAreaView style={rootContainer}>
@@ -74,14 +114,17 @@ export function PostingScreen() {
                 buttonStyle={MainStyles.postButton}
                 textStyle={MainStyles.buttonText}
                 text="Post"
-                onPress={() => {}}
+                onPress={submitHandler}
               />
 
               <CustomButton
                 buttonStyle={MainStyles.postButton}
                 textStyle={MainStyles.buttonText}
                 text="Cancel"
-                onPress={() => {}}
+                onPress={() => {
+                  console.log("cancel");
+                  navigation.navigate("Home");
+                }}
               />
             </View>
           </View>

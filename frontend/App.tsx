@@ -68,10 +68,11 @@ function Navigation() {
     fetchUser();
   }, []);
 
-  const { isLoading, user } = useSelector((state: RootState) => ({
-    isLoading: state.user.loading,
-    user: state.user.user,
-  }));
+  const user = useSelector((state: RootState) => state.user.user);
+  const isLoading = useSelector((state: RootState) => state.user.loading);
+
+  console.log("user", user);
+  console.log("isLoading", isLoading);
 
   if (isLoading) {
     return <LoadingOverlay message="Loading..." />;

@@ -12,20 +12,17 @@ type RootStackParamList = {
 };
 
 export default function SignupScreen() {
-  const { isAuthenticated, isLoading } = useSelector((state: RootState) => ({
-    isAuthenticated: state.user.isAuthenticated,
-    isLoading: state.user.loading,
-  }));
+  const user = useSelector((state: RootState) => state.user.user);
+  const isLoading = useSelector((state: RootState) => state.user.loading);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
-    console.log(isAuthenticated);
-    if (isAuthenticated) {
+    if (user) {
       navigation.navigate("AppNavigator");
     }
-  }, [isAuthenticated]);
+  }, [user]);
 
   if (isLoading) {
     return <LoadingOverlay message="Creating user..." />;
