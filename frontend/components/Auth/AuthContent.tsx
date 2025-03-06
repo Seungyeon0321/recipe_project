@@ -84,7 +84,7 @@ export default function AuthContent({ login }: { login?: boolean }) {
 
     if (loginUser.fulfilled.match(resultAction)) {
       await storeToken(resultAction.payload.token);
-      navigation.navigate("AppNavigator");
+      navigation.navigate("main");
     }
   }
 

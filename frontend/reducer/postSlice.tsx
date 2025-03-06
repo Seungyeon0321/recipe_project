@@ -15,13 +15,13 @@ export const createPost = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log("click");
+      console.log("postData.token", postData.token);
       const response = await axios.post(
         `${client.defaults.baseURL}/post`,
         postData,
         {
           headers: {
-            Authorization: `Bearer ${postData.token}`,
+            authorization: `Bearer ${postData.token}`,
           },
         }
       );

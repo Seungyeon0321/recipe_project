@@ -105,7 +105,7 @@ module.exports = {
           console.log("jwtPayload", jwtPayload);
 
           const user = await User.findById(jwtPayload.id);
-
+          console.log("user", user);
           if (user) {
             return done(null, user);
           } else {

@@ -13,11 +13,11 @@ exports.createPosts = async (req, res, next) => {
     // 게시물에 포스팅은 미들웨어로 막아줌
     console.log("req.body", req.body);
     const userId = req.user.id;
-
+    console.log("userId", userId);
     const images = req.body.images;
 
     const newPost = await Post.create({
-      title: req.body.title,
+      title: req.body.foodTitle,
       image: req.body.foodImage,
       ingredients: req.body.ingredients,
       instructions: req.body.instructions,

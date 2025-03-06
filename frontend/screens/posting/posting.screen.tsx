@@ -55,6 +55,8 @@ export function PostingScreen() {
       );
     }
 
+    console.log("token", token);
+
     //이렇게 하지 않으면 non-serializable error가 발생함
     let postData = {
       foodTitle,

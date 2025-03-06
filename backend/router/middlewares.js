@@ -17,8 +17,9 @@ exports.upload = upload;
 exports.isLoggedIn = (req, res, next) => {
   try {
     // Authorization 헤더에서 토큰 추출
+
     const authHeader = req.headers.authorization;
-    console.log("authHeader", authHeader);
+
     if (!authHeader) {
       return res.status(401).send("No token provided");
     }

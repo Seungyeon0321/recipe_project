@@ -1,9 +1,9 @@
 import React from "react";
-import AuthContent from "../../components/Auth/AuthContent";
+import AuthContent from "../../../components/Auth/AuthContent";
 import { useEffect } from "react";
-import LoadingOverlay from "../../components/UI/LoadingOverlay";
+import LoadingOverlay from "../../../components/UI/LoadingOverlay";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState } from "../../../store/store";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
