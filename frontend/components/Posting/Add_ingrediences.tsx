@@ -32,7 +32,7 @@ export default function Add_ingrediences({ ingredients, setIngredients }) {
   console.log("ingredients", ingredients);
 
   return (
-    <>
+    <View>
       <Text style={title}>What's the ingredients?</Text>
       {ingredients.map((ingredient) => (
         <View key={ingredient.id}>
@@ -89,6 +89,6 @@ export default function Add_ingrediences({ ingredients, setIngredients }) {
         </View>
       ))}
       <AddButton onPress={addIngredient} />
-    </>
+    </View>
   );
 }

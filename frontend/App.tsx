@@ -68,17 +68,17 @@ function Navigation() {
     fetchUser();
   }, []);
 
-  const user = useSelector((state: RootState) => state.user.user);
+  const token = useSelector((state: RootState) => state.user.token);
   const isLoading = useSelector((state: RootState) => state.user.loading);
 
-  console.log("user", user);
   console.log("isLoading", isLoading);
+  console.log("token", token);
 
   if (isLoading) {
     return <LoadingOverlay message="Loading..." />;
   }
 
-  return user ? <AuthenticatedStack /> : <AuthStack />;
+  return token ? <AuthenticatedStack /> : <AuthStack />;
 }
 
 export default function App() {

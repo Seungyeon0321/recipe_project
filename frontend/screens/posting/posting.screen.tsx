@@ -15,7 +15,7 @@ import CustomButton from "../../components/UI/Button";
 import Add_ingrediences from "../../components/Posting/Add_ingrediences";
 import Add_instructions from "../../components/Posting/Add_instructions";
 import { useNavigation } from "@react-navigation/native";
-import { createPost } from "../../reducer/postSlice";
+import { createPost, setPost } from "../../reducer/postSlice";
 import { RootState, AppDispatch } from "../../store/store";
 
 type ProfileNavigationProp = {
@@ -59,7 +59,7 @@ export function PostingScreen() {
     see_my_posts_button_text,
   } = MainStyles;
 
-  const submitHandler = async () => {
+  const submitHandler = () => {
     foodTitle.trim();
     foodImage.trim();
 
@@ -87,19 +87,15 @@ export function PostingScreen() {
       token,
     };
 
-    const resultAction = await dispatch(createPost(postData));
-    console.log("resultAction", resultAction);
-
-    if (createPost.fulfilled.match(resultAction)) {
-      Alert.alert("Post created successfully");
-      navigation.navigate("Home");
-    }
+    dispatch(createPost(postData));
   };
 
   return (
-    // <SafeAreaView style={rootContainer}>
-    //   <ScrollView>
-    /* {!success_post ? (
+    <SafeAreaView
+      style={!success_post ? rootContainer : success_post_main_container}
+    >
+      <ScrollView>
+        {!success_post ? (
           <View>
             <View>
               <Text style={title}>What Do you call it?</Text>
@@ -160,52 +156,41 @@ export function PostingScreen() {
             </View>
           </View>
         ) : (
-          <View>
+          <View style={success_post_container}>
             <View>
-              <Text>Thank you for your sharing!</Text>
+              <Text style={success_post_text}>Thank you for your sharing!</Text>
             </View>
             <View>
               <Image
                 source={require("../../assets/images/food3.png")}
-                style={image_box}
+                style={success_post_image}
               />
             </View>
             <View>
-              <TouchableOpacity style={back_to_home_button_container}>
-                <Text>Back to Home</Text>
+              <TouchableOpacity
+                style={back_to_home_button_container}
+                onPress={() => {
+                  navigation.navigate("Home");
+                  dispatch(setPost());
+                }}
+              >
+                <Text style={back_to_home_button_text}>Back to Home</Text>
               </TouchableOpacity>
             </View>
             <View>
-              <TouchableOpacity style={see_my_posts_button_container}>
-                <Text>See my posts</Text>
+              <TouchableOpacity
+                style={see_my_posts_button_container}
+                onPress={() => {
+                  navigation.navigate("Saved");
+                  dispatch(setPost());
+                }}
+              >
+                <Text style={see_my_posts_button_text}>See my posts</Text>
               </TouchableOpacity>
             </View>
           </View>
-        )} */
-    /* </ScrollView>
-    </SafeAreaView> */
-    <SafeAreaView style={success_post_main_container}>
-      <View style={success_post_container}>
-        <View>
-          <Text style={success_post_text}>Thank you for your sharing!</Text>
-        </View>
-        <View>
-          <Image
-            source={require("../../assets/images/food3.png")}
-            style={success_post_image}
-          />
-        </View>
-        <View>
-          <TouchableOpacity style={back_to_home_button_container}>
-            <Text style={back_to_home_button_text}>Back to Home</Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <TouchableOpacity style={see_my_posts_button_container}>
-            <Text style={see_my_posts_button_text}>See my posts</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
