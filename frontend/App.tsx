@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider, useSelector, useDispatch } from "react-redux";
 import { RootState } from "./store/store";
 import Greeting from "./screens/landing/greeting.screen";
-import Signup from "./screens/saved/signup/signup.screen";
+import Signup from "./screens/signup/signup.screen";
 import Login from "./screens/login/login.screen";
 import LoadingOverlay from "./components/UI/LoadingOverlay";
 import PostDetails from "./screens/postDetailPage/postDetails";
