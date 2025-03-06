@@ -24,12 +24,12 @@ exports.createPosts = async (req, res, next) => {
       userId,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       status: "success",
       post: newPost,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     next(err);
   }
 };

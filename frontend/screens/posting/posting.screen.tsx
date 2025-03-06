@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, Image, ScrollView, Alert } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  Image,
+  ScrollView,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { MainStyles } from "./posting.styles";
@@ -16,6 +24,11 @@ type ProfileNavigationProp = {
 
 export function PostingScreen() {
   const token = useSelector((state: RootState) => state.user.token);
+
+  const success_post = useSelector(
+    (state: RootState) => state.post.success_post
+  );
+  console.log("success_post", success_post);
 
   const [foodTitle, setFoodTitle] = useState("");
   const [foodImage, setFoodImage] = useState("");
@@ -36,9 +49,17 @@ export function PostingScreen() {
     image_box,
     button_main_container,
     button_container,
+    success_post_main_container,
+    success_post_image,
+    back_to_home_button_container,
+    see_my_posts_button_container,
+    success_post_container,
+    success_post_text,
+    back_to_home_button_text,
+    see_my_posts_button_text,
   } = MainStyles;
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     foodTitle.trim();
     foodImage.trim();
 
@@ -65,73 +86,126 @@ export function PostingScreen() {
       ingredients,
       token,
     };
-    console.log("postData", postData);
-    dispatch(createPost(postData));
+
+    const resultAction = await dispatch(createPost(postData));
+    console.log("resultAction", resultAction);
+
+    if (createPost.fulfilled.match(resultAction)) {
+      Alert.alert("Post created successfully");
+      navigation.navigate("Home");
+    }
   };
 
   return (
-    <SafeAreaView style={rootContainer}>
-      <ScrollView>
+    // <SafeAreaView style={rootContainer}>
+    //   <ScrollView>
+    /* {!success_post ? (
+          <View>
+            <View>
+              <Text style={title}>What Do you call it?</Text>
+              <View style={{ height: 50 }}>
+                <TextInput
+                  style={input_box}
+                  value={foodTitle}
+                  placeholder="type here"
+                  onChangeText={(text) => {
+                    console.log(text);
+                    setFoodTitle(text);
+                  }}
+                />
+              </View>
+            </View>
+
+            <View>
+              <Text style={title}>Add an image</Text>
+              <Image
+                source={require("../../assets/images/food3.png")}
+                style={image_box}
+              />
+            </View>
+
+            <View>
+              <Add_ingrediences
+                ingredients={ingredients}
+                setIngredients={setIngredients}
+              />
+            </View>
+
+            <View>
+              <Add_instructions
+                instructions={instructions}
+                setInstructions={setInstructions}
+              />
+            </View>
+
+            <View style={button_main_container}>
+              <View style={button_container}>
+                <CustomButton
+                  buttonStyle={MainStyles.postButton}
+                  textStyle={MainStyles.buttonText}
+                  text="Post"
+                  onPress={submitHandler}
+                />
+
+                <CustomButton
+                  buttonStyle={MainStyles.postButton}
+                  textStyle={MainStyles.buttonText}
+                  text="Cancel"
+                  onPress={() => {
+                    console.log("cancel");
+                    navigation.navigate("Home");
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+        ) : (
+          <View>
+            <View>
+              <Text>Thank you for your sharing!</Text>
+            </View>
+            <View>
+              <Image
+                source={require("../../assets/images/food3.png")}
+                style={image_box}
+              />
+            </View>
+            <View>
+              <TouchableOpacity style={back_to_home_button_container}>
+                <Text>Back to Home</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity style={see_my_posts_button_container}>
+                <Text>See my posts</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )} */
+    /* </ScrollView>
+    </SafeAreaView> */
+    <SafeAreaView style={success_post_main_container}>
+      <View style={success_post_container}>
         <View>
-          <View>
-            <Text style={title}>What Do you call it?</Text>
-            <View style={{ height: 50 }}>
-              <TextInput
-                style={input_box}
-                value={foodTitle}
-                placeholder="type here"
-                onChangeText={(text) => {
-                  console.log(text);
-                  setFoodTitle(text);
-                }}
-              />
-            </View>
-          </View>
-
-          <View>
-            <Text style={title}>Add an image</Text>
-            <Image
-              source={require("../../assets/images/food3.png")}
-              style={image_box}
-            />
-          </View>
-
-          <View>
-            <Add_ingrediences
-              ingredients={ingredients}
-              setIngredients={setIngredients}
-            />
-          </View>
-
-          <View>
-            <Add_instructions
-              instructions={instructions}
-              setInstructions={setInstructions}
-            />
-          </View>
-
-          <View style={button_main_container}>
-            <View style={button_container}>
-              <CustomButton
-                buttonStyle={MainStyles.postButton}
-                textStyle={MainStyles.buttonText}
-                text="Post"
-                onPress={submitHandler}
-              />
-
-              <CustomButton
-                buttonStyle={MainStyles.postButton}
-                textStyle={MainStyles.buttonText}
-                text="Cancel"
-                onPress={() => {
-                  console.log("cancel");
-                  navigation.navigate("Home");
-                }}
-              />
-            </View>
-          </View>
+          <Text style={success_post_text}>Thank you for your sharing!</Text>
         </View>
-      </ScrollView>
+        <View>
+          <Image
+            source={require("../../assets/images/food3.png")}
+            style={success_post_image}
+          />
+        </View>
+        <View>
+          <TouchableOpacity style={back_to_home_button_container}>
+            <Text style={back_to_home_button_text}>Back to Home</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity style={see_my_posts_button_container}>
+            <Text style={see_my_posts_button_text}>See my posts</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }

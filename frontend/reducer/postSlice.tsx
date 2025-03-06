@@ -15,7 +15,6 @@ export const createPost = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log("postData.token", postData.token);
       const response = await axios.post(
         `${client.defaults.baseURL}/post`,
         postData,
@@ -25,8 +24,6 @@ export const createPost = createAsyncThunk(
           },
         }
       );
-
-      console.log("response", response.data);
 
       if (response.status === 200) {
         return response.data;
@@ -51,17 +48,17 @@ interface Post {
 
 interface PostState {
   post: Post | null;
+  success_post: boolean;
 }
 
 const initialState: PostState = {
   post: null,
+  success_post: false,
 };
 
 export const postSlice = createSlice({
   name: "post",
-  initialState: {
-    post: null,
-  },
+  initialState,
   reducers: {
     setPost: (state, action: PayloadAction<Post>) => {
       state.post = action.payload;
@@ -71,9 +68,12 @@ export const postSlice = createSlice({
     builder
       .addCase(createPost.fulfilled, (state, action) => {
         state.post = action.payload;
+        state.success_post = true;
       })
       .addCase(createPost.rejected, (state, action) => {
         console.error("Post creation failed:", action.payload);
       });
   },
 });
+
+export default postSlice.reducer;

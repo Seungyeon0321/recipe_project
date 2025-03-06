@@ -16,8 +16,6 @@ export const getUser = createAsyncThunk(
         }
       );
 
-      console.log("response", response.data);
-
       if (response.status === 200) {
         return response.data;
       } else {
@@ -115,10 +113,11 @@ const userSlice = createSlice({
       .addCase(getUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.userEmail;
+        state.token = action.payload.token;
       })
       .addCase(getUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = "Failed to get user information";
       })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
@@ -132,7 +131,7 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = "Failed to login";
       })
       .addCase(signupUser.pending, (state) => {
         state.loading = true;

@@ -80,8 +80,10 @@ export default function AuthContent({ login }: { login?: boolean }) {
     //submit the action
     const resultAction = await dispatch(action);
 
-    console.log("resultAction", resultAction.payload);
-
+    if (loginUser.rejected.match(resultAction)) {
+      Alert.alert("Login failed", "Please check your credentials");
+    }
+    //여기는 토큰 여부와 관계없이 해당 tokne이 보내온 행위에 대한 성공에 대해 렌더링이 발생생
     if (loginUser.fulfilled.match(resultAction)) {
       await storeToken(resultAction.payload.token);
       navigation.navigate("main");
